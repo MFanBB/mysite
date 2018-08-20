@@ -1,0 +1,183 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'button/button.css' %}">
+    <script type="text/javascript" src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    <!--下拉框-->
+    <link rel="stylesheet" type="text/css" href="{% static 'Combo_box/style.css' %}" />
+    {% block header_extends %}{% endblock %}
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div id="navbar-collapse" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <div id="nav">
+                        <ul class="nav-menu clearfix unstyled">
+
+                            <li><a href="{% url 'home' %}" class="three-d">个人博客
+                            <span class="three-d-box"><span class="front">个人博客</span><span class="back">个人博客</span></span>
+                            </a></li>
+                            <li><a href="{% url 'home' %}" class="three-d">首页
+                            <span class="three-d-box"><span class="front">首页</span><span class="back">首页</span></span>
+                            </a></li>
+
+                            <li><a href="{% url 'blog_list' %}" class="three-d">博客
+                            <span class="three-d-box"><span class="front">博客</span><span class="back">博客</span></span>
+                            </a></li>
+
+                            {% if not user.is_authenticated %}
+                                <li style="margin-left: 1240px"><a href="{% url 'login' %}?from={{ request.get_full_path }}" class="three-d">登录
+                                <span class="three-d-box"><span class="front">登录</span><span class="back">登录</span></span>
+                                </a></li>   
+                                <li><a href="{% url 'register' %}?from={{ request.get_full_path }}" class="three-d">注册
+                                <span class="three-d-box"><span class="front">注册</span><span class="back">注册</span></span>
+                                </a></li> 
+                            {% else %}
+                                
+                                <li class="dropdown">
+                                    <!--
+                                    <a style="background-color: #ffffff; " href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">{{ user.username }} <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        
+                                        <li style="margin-right:20px;"><a href="{% url 'user_info' %}" class="three-d">个人资料
+                                        <span class="three-d-box"><span class="front">个人资料</span><span class="back">个人资料</span></span>
+                                        </a></li>
+                                    -->
+
+                                <div style="color: #0b5e88; font-size: 22px;" id="dd" class="wrapper-dropdown-5" tabindex="1">{{ user.username }}
+                                    <ul class="dropdown">
+                                        <li><a href="{% url 'user_info' %}">个人资料</a></li>
+                                        <li><a href="{% url 'logout' %}?from={{ request.get_full_path }}">退出</a></li>
+                                    </ul>
+                                </div>
+
+                                        <!--
+                                        <li style="margin-right:20px;"><a href="{% url 'logout' %}?from={{ request.get_full_path }}" class="three-d">退出
+                                        <span class="three-d-box"><span class="front">退出</span><span class="back">退出</span></span>
+                                        </a></li>  
+                                        -->   
+                                    </ul>
+                                </li>
+                            {% endif %}
+                         </ul>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+    <!-- Modal -->
+    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <form id="login_medal_form" action="" method="POST">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">登录</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {% for field in login_modal_form %}
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                        {% endfor %}
+                        <span id="login_medal_tip" class="text-danger"></span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">登录</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("#login_medal_form").submit(function(event){
+            event.preventDefault();
+            $.ajax({
+                url: '{% url "login_for_medal" %}',
+                type: 'POST',
+                data: $(this).serialize(),
+                cache: false,
+                success: function(data){
+                    if(data['status']=='SUCCESS'){
+                        window.location.reload();
+                    }else{
+                        $('#login_medal_tip').text('用户名或密码不正确');
+                    }
+                }
+            });
+        });
+    </script>
+
+    {% block script_extends %}{% endblock %}
+
+<div id="footer" class="page-bottom">  
+    <div class="container">
+        <div class="col-sm-4 hidden-xs">
+            <div class="content">
+                <h4 class="title">关于本站</h4>
+                <p>1、基于Django+Bootstrap开发</p>
+                <p>2、主要发表本人的技术原创博客</p>
+                <p>3、本站于 2018-08-01 开始建站</p>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="content">
+                <h4 class="title">建议反馈</h4>
+                <p>1、可在相应的博文底下评论</p>
+                <p>2、发邮件到1392364470@qq.com</p>
+            </div>
+        </div>
+
+        <div class="col-sm-4 hidden-xs">
+            <div class="content">
+                <h4 class="title">友情链接</h4>
+                <p><a href="https://docs.djangoproject.com/en/2.0/" title="Django2.0文档" target=_blank>Django2.0文档</a></p>
+                <p><a href="https://v3.bootcss.com/" title="Bootstrap3中文文档" target=_blank>Bootstrap3中文文档</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <span>Welcome to visit my website &copy; ZYC</span>
+    </div>
+</div>
+</body>
+</html>
+
+        <!--下拉框-->
+        <script type="text/javascript">
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents : function() {
+                    var obj = this;
+                    obj.dd.on('click', function(event){
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    }); 
+                }
+            }
+            $(function() {
+                var dd = new DropDown( $('#dd') );
+                $(document).click(function() {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+        </script>

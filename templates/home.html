@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    你好，地球人
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="description" content="Bookblock: A Content Flip Plugin - Demo 1" />
+    <meta name="keywords" content="javascript, jquery, plugin, css3, flip, page, 3d, booklet, book, perspective" />
+    <meta name="author" content="Codrops" />
+    <link rel="shortcut icon" href="../favicon.ico"> 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bookblock.css' %}" />
+    <!-- custom demo style -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/demo1.css' %}" />
+    <script src="{% static 'js/modernizr.custom.js' %}"></script>
+
+    <script src="http://www.jq22.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="{% static 'js/jquerypp.custom.js' %}"></script>
+    <script src="{% static 'js/jquery.bookblock.js' %}"></script>
+    <!-- 返回顶部 -->
+    <script type="text/javascript" src="{% static 'bottom/jquery.goup.min.js' %}"></script>
+{% endblock %}
+
+{% block nav_home_active %}active{% endblock %}
+
+{% block content %}
+    <div class="header-banner">
+        <div class="container">
+            <h1>Zyc Blog</h1>
+            <p>只为原创，发表<span class="hidden-xs">个人原创</span>高质量的技术博客</p>
+        </div>
+    </div>
+    <!--
+    <div class="col-sm-8 col-md-4">
+        <div class="thumbnail">
+            <h3 class="blog-text-center blog-title"><span>精彩一句</span></h3>
+            <img " src="/static/img/view.jpg" alt="Generic placeholder thumbnail">
+            <div class="caption">
+            <p>在你想要放弃的时候，想想是什</p>
+            <p>么让你当初坚持走到了这里。</p>
+          </div>
+        </div>
+    </div>
+    -->
+
+    <!-- 翻页相册 -->
+        <div style="position:absolute;  margin-left: 110px; margin-top: 50px;" class="main clearfix">
+            <div class="bb-custom-wrapper">
+                <div id="bb-bookblock" class="bb-bookblock">
+                    <div class="bb-item">
+                        <a href="http://drbl.in/bKVq"><img src="static/images/demo1/14.jpg" alt="image01"/></a>
+                    </div>
+                    <div class="bb-item">
+                        <a href="http://drbl.in/ciTX"><img src="static/images/demo1/13.jpg" alt="image02"/></a>
+                    </div>
+                    <div class="bb-item">
+                        <a href="http://drbl.in/cLHx"><img src="static/images/demo1/12.jpg" alt="image03"/></a>
+                    </div>
+                    <div class="bb-item">
+                        <a href="http://drbl.in/bAfn"><img src="static/images/demo1/15.jpg" alt="image04"/></a>
+                    </div>
+                    <div class="bb-item">
+                        <a href="http://drbl.in/dcbE"><img src="static/images/demo1/17.jpg" alt="image05"/></a>
+                    </div>
+                </div>
+                <nav>
+                    <a id="bb-nav-first" href="#" class="bb-custom-icon bb-custom-icon-first">First page</a>
+                    <a id="bb-nav-prev" href="#" class="bb-custom-icon bb-custom-icon-arrow-left">Previous</a>
+                    <a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right">Next</a>
+                    <a id="bb-nav-last" href="#" class="bb-custom-icon bb-custom-icon-last">Last page</a>
+                </nav>
+            </div>
+        </div>
+
+
+
+    <!-- 图表容器 DOM -->
+    <div id="container"></div>
+
+    <div class="content-item">
+        <!--
+        <h3 class="content-item-title">
+            <span class="glyphicon glyphicon-fire"></span>
+            <span>热读榜</span>
+        </h3>
+        -->
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="home-block">
+                    <h4 class="home-block-title">今天热门博客</h4>
+                    <ul class="list">
+                        {% for hot_data in today_hot_data %}
+                            <li>
+                                <a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title }}</a> 阅读({{ hot_data.read_num }})
+                            </li>            
+                        {% empty %}
+                            <li>今天暂时没有热门博客</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="home-block">
+                    <h4 class="home-block-title">昨天热门博客</h4>
+                    <ul class="list">
+                        {% for hot_data in yesterday_hot_data %}
+                            <li><a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title }}</a> 阅读({{ hot_data.read_num }})</li>            
+                        {% empty %}
+                            <li>昨天暂时没有热门博客</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="home-block">
+                    <h4 class="home-block-title">7天热门博客</h4>
+                    <ul class="list">
+                        {% for hot_blog in hot_blogs_for_7_days %}
+                            <li><a href="{% url 'blog_detail' hot_blog.id %}">{{ hot_blog.title }}</a> 阅读({{ hot_blog.read_num_sum }})</li>         {% empty %}
+                           <li>七天暂时没有热门博客</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script>
+            // 图表配置
+            var options = {
+                chart: { type: 'line' },
+                title: { text: null },
+                xAxis: {
+                    categories: {{ dates|safe }},   // x 轴分类
+                    tickmarkPlacement: 'on',
+                    title: { text: '前7日阅读量变化'},
+                },
+                yAxis: {
+                    title: { text: null },
+                    labels:{ enabled: false },
+                    gridLineDashStyle: 'Dash',
+                },
+                series: [{                              // 数据列
+                    name: '阅读量',                     // 数据列名
+                    data: {{ read_nums }}               // 数据
+                }],
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: { enabled: false },
+                credits: { enabled: false },
+            };
+            // 图表初始化函数
+            var chart = Highcharts.chart('container', options);
+        </script>
+
+        <!--翻页相册-->
+        <script>
+            var Page = (function() {
+                
+                var config = {
+                        $bookBlock : $( '#bb-bookblock' ),
+                        $navNext : $( '#bb-nav-next' ),
+                        $navPrev : $( '#bb-nav-prev' ),
+                        $navFirst : $( '#bb-nav-first' ),
+                        $navLast : $( '#bb-nav-last' )
+                    },
+                    init = function() {
+                        config.$bookBlock.bookblock( {
+                            speed : 800,
+                            shadowSides : 0.8,
+                            shadowFlip : 0.7
+                        } );
+                        initEvents();
+                    },
+                    initEvents = function() {
+                        
+                        var $slides = config.$bookBlock.children();
+
+                        // add navigation events
+                        config.$navNext.on( 'click touchstart', function() {
+                            config.$bookBlock.bookblock( 'next' );
+                            return false;
+                        } );
+
+                        config.$navPrev.on( 'click touchstart', function() {
+                            config.$bookBlock.bookblock( 'prev' );
+                            return false;
+                        } );
+
+                        config.$navFirst.on( 'click touchstart', function() {
+                            config.$bookBlock.bookblock( 'first' );
+                            return false;
+                        } );
+
+                        config.$navLast.on( 'click touchstart', function() {
+                            config.$bookBlock.bookblock( 'last' );
+                            return false;
+                        } );
+                        
+                        // add swipe events
+                        $slides.on( {
+                            'swipeleft' : function( event ) {
+                                config.$bookBlock.bookblock( 'next' );
+                                return false;
+                            },
+                            'swiperight' : function( event ) {
+                                config.$bookBlock.bookblock( 'prev' );
+                                return false;
+                            }
+                        } );
+
+                        // add keyboard events
+                        $( document ).keydown( function(e) {
+                            var keyCode = e.keyCode || e.which,
+                                arrow = {
+                                    left : 37,
+                                    up : 38,
+                                    right : 39,
+                                    down : 40
+                                };
+
+                            switch (keyCode) {
+                                case arrow.left:
+                                    config.$bookBlock.bookblock( 'prev' );
+                                    break;
+                                case arrow.right:
+                                    config.$bookBlock.bookblock( 'next' );
+                                    break;
+                            }
+                        } );
+                    };
+                    return { init : init };
+            })();
+        </script>
+        <script>
+                Page.init();
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $.goup({
+                    trigger: 100,
+                    bottomOffset: 150,
+                    locationOffset: 100,
+                    title: '返回顶部',
+                    titleAsText: true,
+                });
+            });
+        </script>      
+
+{% endblock %}
