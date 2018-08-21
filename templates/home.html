@@ -99,7 +99,7 @@
                     <ul class="list">
                         {% for hot_data in today_hot_data %}
                             <li>
-                                <a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title|striptags|truncatechars:35 }}</a> 阅读({{ hot_data.read_num }})
+                                <a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title|striptags|truncatechars:28 }}</a> 阅读({{ hot_data.read_num }})
                             </li>            
                         {% empty %}
                             <li>今天暂时没有热门博客</li>
@@ -112,7 +112,7 @@
                     <h4 class="home-block-title">昨天热门博客</h4>
                     <ul class="list">
                         {% for hot_data in yesterday_hot_data %}
-                            <li><a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title|striptags|truncatechars:35 }}</a> 阅读({{ hot_data.read_num }})</li>            
+                            <li><a href="{% url 'blog_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title|striptags|truncatechars:28 }}</a> 阅读({{ hot_data.read_num }})</li>            
                         {% empty %}
                             <li>昨天暂时没有热门博客</li>
                         {% endfor %}
@@ -124,7 +124,7 @@
                     <h4 class="home-block-title">7天热门博客</h4>
                     <ul class="list">
                         {% for hot_blog in hot_blogs_for_7_days %}
-                            <li><a href="{% url 'blog_detail' hot_blog.id %}">{{ hot_blog.title|striptags|truncatechars:35 }}</a> 阅读({{ hot_blog.read_num_sum }})</li>         {% empty %}
+                            <li><a href="{% url 'blog_detail' hot_blog.id %}">{{ hot_blog.title|striptags|truncatechars:28 }}</a> 阅读({{ hot_blog.read_num_sum }})</li>         {% empty %}
                            <li>七天暂时没有热门博客</li>
                         {% endfor %}
                     </ul>
