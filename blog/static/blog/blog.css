@@ -10,7 +10,7 @@ div.blog h3 {
     margin-top: 0.5em;
 }
 div.blog p.blog-info {
-    margin-bottom: 0;
+    margin-bottom: 10px;
 }
 div.paginator {
     text-align: center;
@@ -18,14 +18,13 @@ div.paginator {
 
 ul.blog-info-description {
     list-style-type: none;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 }
 ul.blog-info-description li{
     display: inline-block;
     margin-right: 1em;
 }
 div.blog-content{
-    text-indent: 2em;
     margin-bottom: 2em;
 }
 div.blog-more {
