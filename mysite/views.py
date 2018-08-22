@@ -9,7 +9,28 @@ from read_statistics.utils import get_seven_days_read_data, get_today_hot_data, 
 from blog.models import Blog
 from blog.views import get_blog_list_common_data
 import time
+from django.shortcuts import Http404  # 导入404异常类
+from django.views.decorators.csrf import csrf_exempt  # 导入禁用跨域攻击检查的装饰器
 
+
+@csrf_exempt  # 装饰上传图片的视图函数
+def image_upload(request):  # 定义上传图片的视图函数
+    if request.method == 'POST':
+        callback = request.GET.get('CKEditorFuncNum')  # 获取客户端上传事件的标记
+        try:
+            path = "media/upload/" + time.strftime("%Y%m%d%H%M%S", time.localtime())
+            f = request.FILES["upload"]  # 获取上传文件的对象
+            file_name = path + "_" + f.name  # 组织文件存储路径与名称
+            with open(file_name, "wb+") as file:  # 创建文件
+                for chunk in f.chunks():  # 读取上传文件
+                    file.write(chunk)  # 写入文件
+        except Exception as e:
+            print(e)
+        res = "<script>window.parent.CKEDITOR.tools.callFunction(" + callback + ",'/" + file_name + "', '');</script>"
+        # 将上传文件的路径通过上传事件的标记写回浏览器客户端
+        return HttpResponse(res)  # 返回响应内容
+    else:
+        raise Http404()  # 抛出异常
 
 def get_7_days_hot_blogs():
     today = timezone.now().date()
