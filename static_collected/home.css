@@ -55,18 +55,18 @@ div#container {
     margin-top: -30px; 
     padding-top: 75px; 
     margin-bottom: 20px; 
-    background-color: #85a9b9;
+    background-color: #309ba0;
 }
 .header-banner h1{ 
     font-family: "Roboto Slab","Helvetica Neue","Helvetica","Arial",sans-serif;
-    text-shadow: 0 2px 1px rgba(0,0,0,0.33);
+    text-shadow: 0 3px 1px rgba(0,0,0,0.33);
     font-size: 3em; 
     color: #fff; 
     margin-bottom: 12px;
 }
 .header-banner p{ 
     font-style: normal;
-    text-shadow: 0 2px 1px rgba(0,0,0,0.33);
+    text-shadow: 0 3px 1px rgba(0,0,0,0.33);
     font-weight: 200; 
     line-height: 3; 
     font-size: 1.7em;
@@ -87,7 +87,7 @@ div#container {
 
 @media (min-width: 1200px){
     .header-banner{
-        min-height: 200px;
+        min-height: 230px;
         padding-top: 30px;
     }
 }
