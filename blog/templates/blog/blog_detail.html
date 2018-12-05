@@ -19,7 +19,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-10 col-xs-offset-1">
-                <h3>{{ blog.title }}</h3>
+                <h3 style="text-align: center;">{{ blog.title }}</h3>
                 <ul class="blog-info-description">
                     <li>作者：{{ blog.author }}</li>
                     <li>分类：<a href="{% url 'blogs_with_type' blog.blog_type.pk %}">{{ blog.blog_type }}</a></li>

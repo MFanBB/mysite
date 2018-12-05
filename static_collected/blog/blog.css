@@ -18,7 +18,10 @@ div.paginator {
 
 ul.blog-info-description {
     list-style-type: none;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    border-bottom: 1px solid #c7d5ef;
+    padding: 20px 0 20px;
 }
 ul.blog-info-description li{
     display: inline-block;
